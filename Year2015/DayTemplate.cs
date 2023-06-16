@@ -1,6 +1,6 @@
 namespace Year2015
 {
-    public class DayTemplate
+    public class DayTemplate : Day
     {
         private string url = "https://adventofcode.com/2015/day/4/input";
         private string input = "";
@@ -28,6 +28,11 @@ namespace Year2015
         public int Part2()
         {
             return -1;
+        }
+
+        public void Test()
+        {
+            
         }
     }
 }
