@@ -9,6 +9,7 @@ namespace Year2015
     {
         private string url = "https://adventofcode.com/2015/day/5/input";
         private HashSet<string> bannedSet = new HashSet<string>() {"ab", "cd", "pq", "xy"};
+        private Dictionary<string, HashSet<int>> pairs;
         private string[] input;
 
         public string getURL()
@@ -41,7 +42,7 @@ namespace Year2015
             }
         }
 
-        private bool IsNice(string str)
+        private bool IsNice1(string str)
         {
             if (str.Where(IsVowel).Count() < 3)
                 return false;
@@ -68,14 +69,41 @@ namespace Year2015
             return true;
         }
 
+        private bool IsNice2(string str)
+        {
+            pairs = new Dictionary<string, HashSet<int>>();
+            bool foundRepeat = false, foundCamel = false;
+            for (int i = 0; i < str.Length - 1; i++)
+            {
+                string pair = str.Substring(i, 2);
+                if (!pairs.ContainsKey(pair))
+                    pairs.Add(pair, new HashSet<int>());
+
+                pairs[pair].Add(i);
+
+                if (pairs[pair].Count > 2 || pairs[pair].Max() - pairs[pair].Min() > 1)
+                    foundRepeat = true;
+                
+                if (i < str.Length - 2 && str[i] == str[i + 2])
+                    foundCamel = true;
+                
+                if (foundCamel && foundRepeat)
+                    return true;
+            }
+
+            return false;
+        }
+        
+        
+
         public int Part1()
         {
-            return input.Count(IsNice);
+            return input.Count(IsNice1);
         }
 
         public int Part2()
         {
-            return -1;
+            return input.Count(IsNice2);
         }
 
         public void Test()
@@ -89,9 +117,24 @@ namespace Year2015
                 "dvszwmarrgswjxmb"
             };
 
+            Console.WriteLine("Part 1 Tests:");
             foreach (string entry in tests)
             {
-                Console.WriteLine("{0}: {1}", entry, IsNice(entry) ? "Nice": "Naughty");
+                Console.WriteLine("\t{0}: {1}", entry, IsNice1(entry) ? "Nice": "Naughty");
+            }
+            
+            tests = new List<string>()
+            {
+                "qjhvhtzxzqqjkmpb",
+                "xxyxx",
+                "uurcxstgmygtbstg",
+                "ieodomkazucvgmuy",
+            };
+            
+            Console.WriteLine("Part 2 Tests:");
+            foreach (string entry in tests)
+            {
+                Console.WriteLine("\t{0}: {1}", entry, IsNice2(entry) ? "Nice": "Naughty");
             }
         }
     }
