@@ -49,5 +49,10 @@ namespace Year2015
         {
             return presents.Select(CalculateRibbon).Sum();
         }
+
+        public void Test()
+        {
+            
+        }
     }
 }

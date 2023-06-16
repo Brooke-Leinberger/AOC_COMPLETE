@@ -4,6 +4,7 @@ namespace Year2015
     {
         string getURL();
         void LoadInputs(string input);
+        void Test();
         int Part1();
         int Part2();
     }

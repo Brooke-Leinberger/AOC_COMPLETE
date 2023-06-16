@@ -88,5 +88,10 @@ namespace Year2015
 
             return history.Count;
         }
+
+        public void Test()
+        {
+            
+        }
     }
 }

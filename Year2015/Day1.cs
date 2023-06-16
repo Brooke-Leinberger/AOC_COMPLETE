@@ -42,5 +42,10 @@ namespace Year2015
         {
             this.input = inputs;
         }
+
+        public void Test()
+        {
+            
+        }
     }
 }

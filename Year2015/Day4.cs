@@ -74,5 +74,10 @@ namespace Year2015
         {
             return Part(6);
         }
+
+        public void Test()
+        {
+            
+        }
     }
 }
