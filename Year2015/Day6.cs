@@ -10,13 +10,23 @@ namespace Year2015
         private string url = "https://adventofcode.com/2015/day/6/input";
         private Dictionary<string, int> key = new Dictionary<string, int>()
         {
-            { "turn on",  1 }, 
-            { "turn off", 0 }, 
-            { "toggle",   2 },
+            { "turn on",   1 }, 
+            { "turn off", -1 }, 
+            { "toggle",    2 },
         };
         private int[][] input;
-        private bool[][] lights = new bool [1000][];
+        private int[][] lights = new int [1000][];
 
+        
+
+        private int ModifyLight(int op, int state)
+        {
+            if (op != key["toggle"])
+                return op;
+
+            return state > 0 ? key["turn off"] : key["turn on"];
+        }
+        
         private int ParseOp(string op)
         {
             if (key.ContainsKey(op))
@@ -52,33 +62,13 @@ namespace Year2015
         private void Clear()
         {
             for (int i = 0; i < lights.Length; i++)
-                lights[i] = new bool[1000];
+                lights[i] = new int[1000];
             
-            OperateLights(new int[] {0, 0, 0, 999, 999});
-        }
-
-        private bool ModifyLight(int op, bool state)
-        {
-            switch (op)
+            for (int row = 0; row < lights.Length; row++)
             {
-                case 0:
-                case 1:
-                    return op == 1 ? true : false;    
-
-                case 2:
-                    return !state;
-                default:
-                    throw new Exception("Invalid Light Operation");
-            }
-        }
-
-        private void OperateLights(int[] entry)
-        {
-            for (int row = entry[2]; row <= entry[4]; row++)
-            {
-                for (int col = entry[1]; col <= entry[3]; col++)
+                for (int col = 0; col < lights[row].Length; col++)
                 {
-                    lights[row][col] = ModifyLight(entry[0], lights[row][col]);
+                    lights[row][col] = 0;
                 }
             }
         }
@@ -89,24 +79,53 @@ namespace Year2015
 
             foreach (int[] entry in input)
             {
-                OperateLights(entry);
+                for (int row = entry[2]; row <= entry[4]; row++)
+                {
+                    for (int col = entry[1]; col <= entry[3]; col++)
+                    {
+                        lights[row][col] = entry[0] != key["toggle"] 
+                            ? entry[0] 
+                            : (lights[row][col] > 0 ? key["turn off"] : key["turn on"]);
+                    }
+                }
             }
             
-            return lights.Select(c => c.Count(d => d)).Sum();
+            return lights.Select(c => c.Count(d => d > 0)).Sum();
         }
 
         public int Part2()
         {
             Clear();
-            return -1;
+
+            foreach (int[] entry in input)
+            {
+                for (int row = entry[2]; row <= entry[4]; row++)
+                {
+                    for (int col = entry[1]; col <= entry[3]; col++)
+                    {
+                        lights[row][col] += entry[0];
+                        if (lights[row][col] < 0)
+                            lights[row][col] = 0;
+                    }
+                }
+            }
+            
+            return lights.Select(c => c.Sum()).Sum();
         }
 
         public void Test()
         {
+            string tests;
+            
             Clear();
-            string tests = "turn on 0,0 through 999,999\ntoggle 0,0 through 999,0\nturn off 499,499 through 500,500";
+            tests = "turn on 0,0 through 999,999\ntoggle 0,0 through 999,0\nturn off 499,499 through 500,500";
             LoadInputs(tests);
             Console.WriteLine("Test 1: {0}", Part1());
+            
+            Clear();
+            tests = "toggle 0,0 through 999,999";
+            LoadInputs(tests);
+            Console.WriteLine("Test 2: {0}", Part2());
         }
     }
 }
