@@ -9,7 +9,7 @@ namespace Year2015
     {
         public static void Main(string[] args)
         {
-            Day day = new Day7();
+            Day day = new Day8();
             day.Test();
             day.LoadInputs(read_inputs(day.getURL()));
             Console.WriteLine("Part 1: {0}\nPart 2: {1}", day.Part1(), day.Part2());
