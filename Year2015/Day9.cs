@@ -121,7 +121,24 @@ namespace Year2015
 
         public int Part2()
         {
-            return -1;
+            UInt16 max = 0;
+            
+            //calculate permutations
+            List<UInt16[]> permutations = new List<UInt16[]>();
+            UInt16[] seed = new UInt16[cities.Count];
+            for (int i = 0; i < seed.Length; i++)
+                seed[i] = (UInt16) i;
+            
+            HeapsAlgorithm(seed, permutations, cities.Count);
+            
+            //brute force
+            foreach (UInt16[] permutation in permutations)
+            {
+                UInt16 distance = CalculatePermuation(permutation);
+                max = distance > max ? distance : max;
+            }
+
+            return max;
         }
 
         public void Test()
